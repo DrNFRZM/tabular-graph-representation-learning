@@ -12,7 +12,7 @@ import json
 import platform
 import time
 from dataclasses import dataclass, replace
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
@@ -499,8 +499,8 @@ def graph_table(graph_stats: pd.DataFrame) -> list[str]:
         "",
     ]
     if {"bipartite", "chance"} <= set(wide.index) and "agreement_mean" in wide.columns:
-        agree = wide.loc["bipartite", "agreement_mean"]
-        chance = wide.loc["chance", "label_agreement_by_chance"]
+        agree = cast(float, wide.loc["bipartite", "agreement_mean"])
+        chance = cast(float, wide.loc["chance", "label_agreement_by_chance"])
         lines += [
             "Record-value graph: averaged over columns and training rows, "
             f"{agree:.3f} of the other records that share a categorical value with a record have the "

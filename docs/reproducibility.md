@@ -1,5 +1,32 @@
 # Reproduction check
 
+## 11 November 2026 maintenance verification
+
+The AI-assisted maintenance pass used Python 3.12.16 on Windows, CPU only.
+The numerical stack was NumPy 2.3.5, SciPy 1.17.0, pandas 2.2.3,
+scikit-learn 1.8.0, PyTorch 2.15.0+cpu, PyG 2.8.1, and Matplotlib 3.10.8.
+Tests used one numerical-library thread and a writable workspace temporary
+directory. The shared audit environment passed its dependency consistency check.
+
+- The full suite passed: 175 tests, including the downloaded-data check.
+- UCI Adult downloaded and passed the recorded SHA-256 and row-count checks:
+  48,842 source rows and 42,468 after the existing cleaning procedure.
+- `python scripts/verify_results.py` verified 1,550 unique finite metric rows,
+  method/seed AUC coverage, the saved configuration, nine README AUC rows, and
+  the record-value paired control. Its corruption tests exercise duplicate
+  keys, missing observations, and a changed README claim.
+- Ruff lint and formatting checks passed. mypy checked 15 source/script files.
+  An explicit type assertion for numeric diagnostic scalars accommodates the
+  current pandas stubs; it does not change their runtime values.
+
+The expensive five-seed training/evaluation was not repeated. Unit tests do
+exercise the neural pipeline on synthetic data. All original numerical result
+files remain unchanged. Cached embeddings still require a new configuration
+name or run directory when the protocol changes; their cache key is not a
+complete configuration fingerprint.
+
+## Earlier verification record
+
 The installation was checked in a fresh Python 3.12.14 virtual environment on
 Linux, CPU only. PyTorch was installed from the CPU wheel index, followed by
 `pip install -e ".[dev]"`. `pip check` found no dependency conflicts.

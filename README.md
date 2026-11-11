@@ -28,6 +28,9 @@ The [full comparison plot](results/full/figures/fig_main_comparison.png) include
 
 ## Reproduce a smoke run
 
+This is an independently developed personal project. "GraphMix" is its working
+name; the canonical repository is `tabular-graph-representation-learning`.
+
 Python 3.11 or newer is required. A CPU-only PyTorch installation is sufficient.
 The [reproduction check](docs/reproducibility.md) lists the tested environment
 and distinguishes the smoke run from the committed full experiment.
@@ -44,6 +47,11 @@ make quick     # 6,000 rows, one seed, all code paths
 ```
 
 `make quick` is a smoke test; its one-seed results are not intended for scientific interpretation.
+
+To check the committed AUC table and paired control without downloading data or
+training models, run `python scripts/verify_results.py`. CI also checks complete
+method/seed coverage, duplicate metric keys, and the saved configuration. This
+checks arithmetic consistency, not whether retraining reproduces the CSVs.
 
 ## Research question
 
@@ -169,6 +177,9 @@ The full CPU run is intentionally expensive; the committed experiment took rough
 training, followed by about 12 minutes for evaluation, on two CPU cores. Saved embeddings are
 written to `runs/` and are not tracked. Existing embeddings are skipped unless
 `scripts/train_encoders.py --overwrite` is used.
+Use a distinct configuration name or `runs_dir` when changing data, model, or
+training settings: the embedding cache does not compare a complete configuration
+fingerprint before skipping existing files.
 
 Key outputs:
 
@@ -200,6 +211,9 @@ Key outputs:
   was not part of the reported run.
 
 ## Reproducibility and project notes
+
+[Development and attribution](docs/development.md) records the original independent
+implementation and the later AI-assisted maintenance work.
 
 - Seeds control splitting, corruption, low-label subsets, random graphs, and PyTorch initialisation.
 - Preprocessing, PCA, encoders, probe selection, and graph reference pools respect split boundaries.
