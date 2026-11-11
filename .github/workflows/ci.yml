@@ -31,3 +31,5 @@ jobs:
 
       - name: Tests
         run: make test
+      - name: Verify saved metrics and published claims
+        run: python scripts/verify_results.py
